@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Room Rental Operations Playbook — Jerel Williams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0c2340;
+  --ocean: #1e7fa0;
+  --seafoam: #4ab5a0;
+  --gold: #d4a843;
+  --gold-light: #fef9ec;
+  --coral: #e8755a;
+  --sage: #4a7c59;
+  --white: #ffffff;
+  --off-white: #f6f9fc;
+  --text: #1a2e44;
+  --muted: #64788c;
+  --border: #dde8f0;
+  --red: #c0392b;
+  --green: #27ae60;
+  --sidebar-w: 260px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; color:var(--text); background:var(--off-white); line-height:1.6; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh;
+  background:var(--navy); color:#fff; overflow-y:auto; z-index:200;
+  display:flex; flex-direction:column;
+}
+.sidebar-brand { padding:24px 20px 16px; border-bottom:2px solid var(--gold); }
+.sidebar-brand h2 { font-size:14px; font-weight:800; color:var(--gold); text-transform:uppercase; letter-spacing:1.5px; }
+.sidebar-brand p { font-size:11px; color:#8fa8c0; margin-top:3px; }
+.sidebar nav a {
+  display:flex; align-items:center; gap:10px; padding:9px 20px;
+  color:#8fa8c0; text-decoration:none; font-size:12.5px; font-weight:500;
+  border-left:3px solid transparent; transition:all 0.15s;
+}
+.sidebar nav a:hover { background:rgba(255,255,255,0.06); color:var(--gold); border-left-color:var(--gold); }
+.sidebar nav a .nn { width:22px; height:22px; background:rgba(255,255,255,0.08); border-radius:4px; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.sidebar-footer { margin-top:auto; padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); font-size:11px; color:#4a6a8a; }
+
+/* ── MAIN ── */
+.main { margin-left:var(--sidebar-w); }
+
+/* ── HERO ── */
+.hero {
+  position:relative; height:420px; overflow:hidden;
+  background:linear-gradient(135deg,#0c2340 0%,#1e7fa0 100%);
+}
+.hero img { width:100%; height:100%; object-fit:cover; opacity:0.45; }
+.hero-overlay {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  justify-content:flex-end; padding:48px 52px;
+  background:linear-gradient(to top, rgba(12,35,64,0.9) 0%, rgba(12,35,64,0.3) 60%, transparent 100%);
+}
+.hero-overlay h1 { font-size:32px; font-weight:800; color:#fff; line-height:1.2; margin-bottom:8px; }
+.hero-overlay p { font-size:15px; color:var(--gold); font-weight:500; margin-bottom:16px; }
+.hero-badges { display:flex; gap:10px; flex-wrap:wrap; }
+.badge { padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+.badge-gold { background:var(--gold); color:var(--navy); }
+.badge-glass { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25); }
+
+/* ── SECTIONS ── */
+.section { background:var(--white); border-radius:16px; margin:28px 32px; box-shadow:0 2px 16px rgba(12,35,64,0.06); overflow:hidden; }
+.section-head { padding:22px 32px; display:flex; align-items:center; gap:14px; }
+.sec-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.section-head h2 { font-size:18px; font-weight:700; }
+.section-head p { font-size:13px; color:var(--muted); margin-top:2px; }
+.section-body { padding:8px 32px 32px; }
+
+.s-navy .section-head { background:var(--navy); color:#fff; }
+.s-navy .section-head h2, .s-navy .section-head p { color:#fff; }
+.s-navy .sec-icon { background:rgba(255,255,255,0.12); }
+.s-ocean .section-head { background:var(--ocean); color:#fff; }
+.s-ocean .section-head h2, .s-ocean .section-head p { color:#fff; }
+.s-ocean .sec-icon { background:rgba(255,255,255,0.15); }
+.s-seafoam .section-head { background:var(--seafoam); color:#fff; }
+.s-seafoam .section-head h2, .s-seafoam .section-head p { color:#fff; }
+.s-seafoam .sec-icon { background:rgba(255,255,255,0.15); }
+.s-gold .section-head { background:var(--gold); color:var(--navy); }
+.s-gold .sec-icon { background:rgba(255,255,255,0.25); }
+.s-coral .section-head { background:var(--coral); color:#fff; }
+.s-coral .section-head h2, .s-coral .section-head p { color:#fff; }
+.s-coral .sec-icon { background:rgba(255,255,255,0.15); }
+.s-sage .section-head { background:var(--sage); color:#fff; }
+.s-sage .section-head h2, .s-sage .section-head p { color:#fff; }
+.s-sage .sec-icon { background:rgba(255,255,255,0.15); }
+
+/* ── PHOTO COMPONENTS ── */
+.photo-frame {
+  border-radius:12px; overflow:hidden; background:var(--off-white);
+  position:relative; aspect-ratio:4/3;
+}
+.photo-frame img { width:100%; height:100%; object-fit:cover; display:block; }
+.photo-frame .ph {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:8px;
+  font-size:13px; font-weight:600; color:var(--muted);
+}
+.photo-frame .ph-icon { font-size:32px; }
+.photo-caption { font-size:12px; color:var(--muted); padding:8px 4px 0; font-weight:500; }
+
+.photo-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.photo-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+/* ── BEFORE/AFTER ── */
+.before-after { display:grid; grid-template-columns:1fr 1fr; gap:0; border-radius:16px; overflow:hidden; margin-bottom:28px; }
+.ba-panel { position:relative; }
+.ba-panel img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+.ba-panel .ba-ph {
+  width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:8px; font-size:14px; color:#fff; font-weight:600;
+}
+.ba-before .ba-ph { background:linear-gradient(135deg,#4a3728,#7a5c47); }
+.ba-after .ba-ph { background:linear-gradient(135deg,#1e7fa0,#4ab5a0); }
+.ba-label {
+  position:absolute; top:16px; left:16px; padding:6px 16px;
+  border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+}
+.ba-before .ba-label { background:rgba(0,0,0,0.55); color:#fff; }
+.ba-after .ba-label { background:var(--gold); color:var(--navy); }
+.ba-caption {
+  position:absolute; bottom:0; left:0; right:0; padding:12px 16px;
+  background:linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  color:#fff; font-size:12px;
+}
+
+/* ── PRODUCT CARDS ── */
+.product-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.product-card {
+  border:1.5px solid var(--border); border-radius:12px; overflow:hidden;
+  transition:box-shadow 0.2s, transform 0.2s;
+}
+.product-card:hover { box-shadow:0 8px 24px rgba(12,35,64,0.12); transform:translateY(-2px); }
+.product-img {
+  aspect-ratio:4/3; background:var(--off-white); display:flex;
+  align-items:center; justify-content:center; font-size:48px; position:relative;
+  overflow:hidden;
+}
+.product-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.product-body { padding:14px; }
+.product-name { font-size:13px; font-weight:700; margin-bottom:4px; }
+.product-why { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:10px; }
+.product-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:11px; font-weight:600; padding:3px 10px; border-radius:12px;
+}
+.pb-warranty { background:#e8f5e9; color:#2d6a3f; }
+.pb-required { background:#fdecea; color:#c0392b; }
+.pb-smart { background:#e3f2fd; color:#1565c0; }
+.pb-saves { background:#fef9ec; color:#7a5c00; }
+.buy-link {
+  display:block; margin-top:10px; text-align:center; padding:8px;
+  background:var(--navy); color:#fff; border-radius:8px;
+  font-size:12px; font-weight:600; text-decoration:none;
+  transition:background 0.15s;
+}
+.buy-link:hover { background:var(--ocean); }
+
+/* ── AESTHETIC PALETTE ── */
+.palette-strip { display:flex; gap:12px; margin:20px 0; flex-wrap:wrap; }
+.swatch { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.swatch-color { width:56px; height:56px; border-radius:10px; border:1.5px solid rgba(0,0,0,0.06); }
+.swatch-label { font-size:11px; font-weight:600; color:var(--muted); text-align:center; }
+
+/* ── CALLOUTS ── */
+.callout {
+  border-radius:10px; padding:14px 18px; margin:16px 0; font-size:14px; line-height:1.6;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.callout .ci { font-size:20px; flex-shrink:0; margin-top:1px; }
+.callout strong { display:block; font-weight:700; margin-bottom:2px; }
+.c-gold { background:var(--gold-light); border-left:4px solid var(--gold); }
+.c-blue { background:#e8f4fb; border-left:4px solid var(--ocean); }
+.c-green { background:#e8f5e9; border-left:4px solid var(--green); }
+.c-red { background:#fdecea; border-left:4px solid var(--red); }
+.c-seafoam { background:#e8f6f4; border-left:4px solid var(--seafoam); }
+
+/* ── SECTION TITLE ── */
+.stitle { font-size:15px; font-weight:700; color:var(--navy); margin:24px 0 12px; display:flex; align-items:center; gap:8px; }
+.stitle::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── TABLES ── */
+table { width:100%; border-collapse:collapse; font-size:13px; margin:12px 0; }
+th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:12px; font-weight:600; }
+td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:nth-child(even) td { background:#fafcfe; }
+.td-red { font-weight:700; color:var(--red); }
+.td-green { font-weight:700; color:var(--green); }
+.td-gold { font-weight:700; color:var(--gold); }
+
+/* ── STEP TIMELINE ── */
+.timeline { list-style:none; margin:16px 0; }
+.timeline li {
+  display:flex; gap:16px; padding-bottom:24px; position:relative;
+}
+.timeline li:last-child { padding-bottom:0; }
+.timeline li::before {
+  content:''; position:absolute; left:17px; top:36px; bottom:0;
+  width:2px; background:var(--border);
+}
+.timeline li:last-child::before { display:none; }
+.tl-num {
+  width:36px; height:36px; border-radius:50%; background:var(--navy);
+  color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center;
+  justify-content:center; flex-shrink:0; z-index:1;
+}
+.tl-body { flex:1; }
+.tl-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.tl-detail { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:6px; }
+.tl-who { display:inline-block; font-size:11px; font-weight:600; padding:2px 10px; border-radius:10px; background:var(--navy); color:#fff; }
+.tl-911 .tl-num { background:var(--red); }
+.tl-3 .tl-num { background:var(--ocean); }
+.tl-4 .tl-num { background:var(--green); }
+
+/* ── CHECKLIST CARDS ── */
+.checklist-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
+.checklist-card { border:1.5px solid var(--border); border-radius:12px; padding:18px; }
+.cc-head { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.cc-icon { font-size:22px; }
+.cc-title { font-size:13px; font-weight:700; color:var(--navy); }
+.cc-list { list-style:none; }
+.cc-list li { font-size:12.5px; padding:4px 0; display:flex; gap:8px; align-items:flex-start; border-bottom:1px dashed var(--border); }
+.cc-list li:last-child { border-bottom:none; }
+.cc-list li::before { content:'☐'; color:var(--ocean); flex-shrink:0; margin-top:1px; }
+
+/* ── CHECKLIST SIMPLE ── */
+.cl { list-style:none; margin:8px 0; }
+.cl li { padding:6px 0; font-size:13px; display:flex; gap:10px; align-items:flex-start; border-bottom:1px dashed var(--border); }
+.cl li:last-child { border-bottom:none; }
+.cl li::before { content:'☐'; color:var(--ocean); flex-shrink:0; font-size:14px; }
+
+/* ── MAINTENANCE ESCALATION ── */
+.esc-flow { display:flex; flex-direction:column; gap:0; margin:16px 0; }
+.esc-step {
+  display:flex; gap:16px; align-items:stretch;
+  border:1.5px solid var(--border); border-bottom:none; overflow:hidden;
+}
+.esc-step:first-child { border-radius:12px 12px 0 0; }
+.esc-step:last-child { border-bottom:1.5px solid var(--border); border-radius:0 0 12px 12px; }
+.esc-num {
+  width:52px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-size:20px; font-weight:800; color:#fff; padding:16px 0;
+}
+.es1 .esc-num { background:var(--ocean); }
+.es2 .esc-num { background:var(--seafoam); }
+.es3 .esc-num { background:var(--gold); }
+.es4 .esc-num { background:var(--green); }
+.es5 .esc-num { background:var(--sage); }
+.es911 .esc-num { background:var(--red); font-size:14px; }
+.esc-content { padding:16px 18px; flex:1; }
+.esc-who { font-size:13px; font-weight:700; margin-bottom:4px; }
+.esc-desc { font-size:13px; color:var(--muted); line-height:1.6; }
+.esc-tag { display:inline-block; margin-top:6px; font-size:11px; font-weight:700; padding:2px 10px; border-radius:10px; background:var(--off-white); color:var(--muted); border:1px solid var(--border); }
+
+/* ── PRIORITY TABLE ── */
+.priority-row-e td:first-child { font-weight:800; color:var(--red); font-size:12px; }
+.priority-row-u td:first-child { font-weight:800; color:var(--coral); font-size:12px; }
+.priority-row-r td:first-child { font-weight:800; color:var(--green); font-size:12px; }
+
+/* ── METRIC CARDS ── */
+.metric-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:16px 0; }
+.metric-card {
+  background:var(--navy); color:#fff; border-radius:12px; padding:20px;
+  text-align:center;
+}
+.metric-val { font-size:28px; font-weight:800; color:var(--gold); margin-bottom:4px; }
+.metric-lbl { font-size:12px; font-weight:600; opacity:0.8; margin-bottom:6px; }
+.metric-target { font-size:11px; opacity:0.55; }
+
+/* ── STAFF CARD ── */
+.staff-card { background:var(--off-white); border-radius:12px; padding:20px; margin:16px 0; }
+.staff-card h4 { font-size:14px; font-weight:700; margin-bottom:12px; color:var(--navy); border-bottom:2px solid var(--gold); padding-bottom:8px; }
+
+/* ── ROI BOX ── */
+.roi-box { background:var(--navy); color:#fff; border-radius:12px; padding:20px; margin:16px 0; }
+.roi-box h4 { font-size:14px; font-weight:700; color:var(--gold); margin-bottom:14px; }
+.roi-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:13px; }
+.roi-row:last-child { border:none; margin-top:6px; font-weight:800; font-size:15px; color:var(--gold); }
+
+/* ── LOCK PLATFORM CARDS ── */
+.lock-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+.lock-card { border-radius:12px; padding:18px; border:1.5px solid var(--border); }
+.lock-card.lc-best { border-color:var(--seafoam); background:#f0faf8; }
+.lock-card.lc-avoid { border-color:#fbb; background:#fff5f5; }
+.lock-title { font-size:14px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.lock-price { font-size:20px; font-weight:800; color:var(--navy); margin-bottom:4px; }
+.lock-price span { font-size:12px; font-weight:500; color:var(--muted); }
+.lock-desc { font-size:12.5px; color:var(--muted); line-height:1.6; margin-top:8px; }
+.lc-rec { display:inline-block; font-size:11px; font-weight:700; padding:2px 10px; border-radius:10px; margin-top:8px; }
+.lc-rec-best { background:#e8f5e9; color:#2d6a3f; }
+.lc-rec-test { background:var(--gold-light); color:#7a5c00; }
+.lc-rec-avoid { background:#fdecea; color:var(--red); }
+.lc-rec-future { background:#e8f4fb; color:var(--ocean); }
+
+/* ── HOUSE RULE CARD ── */
+.rule-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+.rule-card { border-radius:12px; padding:16px 18px; border:1.5px solid var(--border); }
+.rule-num { font-size:28px; font-weight:800; color:var(--gold); margin-bottom:4px; }
+.rule-title { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.rule-text { font-size:12.5px; color:var(--muted); line-height:1.6; }
+.rule-enforcement { margin-top:10px; font-size:11.5px; font-weight:600; color:var(--red); }
+
+/* ── MOBILE ── */
+@media (max-width:900px) {
+  .sidebar { display:none; }
+  .main { margin-left:0; }
+  .section { margin:16px; }
+  .section-body { padding:8px 16px 20px; }
+  .section-head { padding:16px; }
+  .hero-overlay { padding:28px 20px; }
+  .hero-overlay h1 { font-size:22px; }
+  .photo-grid-3, .checklist-grid, .product-grid, .metric-grid, .lock-grid, .rule-grid { grid-template-columns:1fr; }
+  .photo-grid-2 { grid-template-columns:1fr; }
+  .before-after { grid-template-columns:1fr; }
+  .hero { height:320px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <h2>🏖️ Room Rental Ops</h2>
+    <p>Jacksonville, FL — Jerel Williams</p>
+  </div>
+  <nav>
+    <a href="#visual"><span class="nn">★</span> Visual Standard</a>
+    <a href="#turn"><span class="nn">1</span> Turn Process</a>
+    <a href="#ready"><span class="nn">2</span> Room Ready</a>
+    <a href="#rules"><span class="nn">3</span> House Rules</a>
+    <a href="#locks"><span class="nn">4</span> Lock System</a>
+    <a href="#materials"><span class="nn">5</span> Materials &amp; Fixtures</a>
+    <a href="#clean"><span class="nn">6</span> Cleanliness</a>
+    <a href="#maint"><span class="nn">7</span> Maintenance</a>
+    <a href="#ai"><span class="nn">8</span> AI &amp; Automation</a>
+    <a href="#staff"><span class="nn">9</span> Staff Reference</a>
+    <a href="#metrics"><span class="nn">10</span> Metrics</a>
+  </nav>
+  <div class="sidebar-footer">
+    "Cash flow is king. If you don't measure it, you don't manage it."<br><br>
+    Owner: Jerel Williams<br>
+    Staff: Andrea &amp; Sandra<br>
+    Updated: March 2026
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1400&auto=format&fit=crop&q=80" alt="Coastal beach house bedroom interior" onerror="this.style.opacity='0'">
+  <div class="hero-overlay">
+    <h1>Weekly Room Rental Operations Playbook</h1>
+    <p>Standardized Systems for Consistent Cash Flow — Jacksonville, FL</p>
+    <div class="hero-badges">
+      <span class="badge badge-gold">🏖️ Beachy Modern Aesthetic</span>
+      <span class="badge badge-glass">16+ Properties</span>
+      <span class="badge badge-glass">Target: 95% Occupancy</span>
+      <span class="badge badge-glass">Turn in 1 Day</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- VISUAL STANDARD HUB -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-gold" id="visual">
+  <div class="section-head">
+    <div class="sec-icon">🏖️</div>
+    <div>
+      <h2>The Visual Standard — What Every Room Must Look Like</h2>
+      <p>Show this section to Andrea and Sandra. This is the photo-check standard. If a room doesn't look like this, it's not ready.</p>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="stitle">Before vs. After — The Standard We're Building Toward</div>
+    <div class="before-after">
+      <div class="ba-panel ba-before">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80" alt="Before — dated room" onerror="this.style.display='none'">
+        <div class="ba-ph" style="background:linear-gradient(135deg,#3d2b1f,#6b4c35);">
+          <span style="font-size:40px;">😬</span>
+          <span>Old look: clutter, dated hardware,<br>no aesthetic, low-trust</span>
+        </div>
+        <span class="ba-label">BEFORE</span>
+        <div class="ba-caption">Mismatched hardware · No bedding standard · No system</div>
+      </div>
+      <div class="ba-panel ba-after">
+        <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&auto=format&fit=crop&q=80" alt="After — beachy clean room" onerror="this.style.display='none'">
+        <div class="ba-ph" style="background:linear-gradient(135deg,#1e7fa0,#4ab5a0); display:none;">
+          <span style="font-size:40px;">✅</span>
+          <span>After: white walls, brushed nickel,<br>coastal bedding, hotel-style</span>
+        </div>
+        <span class="ba-label">AFTER ✓</span>
+        <div class="ba-caption">White walls · Brushed nickel hardware · Coastal bedding · Hotel-made bed</div>
+      </div>
+    </div>
+
+    <div class="stitle">What Good Looks Like — Photo Reference Grid</div>
+    <div class="photo-grid-3">
+      <div>
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1522771739844-12a943b1f666?w=600&auto=format&fit=crop&q=80" alt="Hotel-style bed with coastal bedding" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph"><div class="ph-icon">🛏️</div><div>Coastal Bedding Set</div></div>
+        </div>
+        <div class="photo-caption">✅ Made hotel-style · Coastal colors · Throw folded at foot</div>
+      </div>
+      <div>
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&auto=format&fit=crop&q=80" alt="Brushed nickel bathroom faucet" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph"><div class="ph-icon">🚿</div><div>Brushed Nickel Faucet</div></div>
+        </div>
+        <div class="photo-caption">✅ Brushed nickel · Moen lifetime warranty · Every bathroom</div>
+      </div>
+      <div>
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&auto=format&fit=crop&q=80" alt="Clean kitchen with white cabinets" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph"><div class="ph-icon">🍳</div><div>Clean Kitchen Standard</div></div>
+        </div>
+        <div class="photo-caption">✅ Sink empty · Counters clear · Stove spotless</div>
+      </div>
+      <div>
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1594611312895-0e2498b88699?w=600&auto=format&fit=crop&q=80" alt="Clean modern white bedroom" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph"><div class="ph-icon">🌊</div><div>Coastal Room Look</div></div>
+        </div>
+        <div class="photo-caption">✅ White walls · Square fixtures · Modern minimal</div>
+      </div>
+      <div>
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80" alt="Modern bathroom tile and fixtures" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph"><div class="ph-icon">🛁</div><div>Bathroom Standard</div></div>
+        </div>
+        <div class="photo-caption">✅ Beachy shower curtain · Brushed nickel rod + rings</div>
+      </div>
+      <div>
+        <div class="photo-frame" style="background:linear-gradient(135deg,#e8f6f4,#d0ede9); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; aspect-ratio:4/3;">
+          <div style="font-size:48px;">🎨</div>
+          <div style="font-weight:700; font-size:13px; color:var(--navy);">Color Palette</div>
+        </div>
+        <div class="photo-caption">White walls + Ocean blue, Navy, Sage green, Sand accents</div>
+      </div>
+    </div>
+
+    <div class="stitle">Approved Color Palette — Consistent Across Every Property</div>
+    <div class="palette-strip">
+      <div class="swatch"><div class="swatch-color" style="background:#ffffff; border:2px solid #ddd;"></div><div class="swatch-label">White<br>Walls</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#0c2340;"></div><div class="swatch-label">Navy<br>Accents</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1e7fa0;"></div><div class="swatch-label">Ocean<br>Blue</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#4ab5a0;"></div><div class="swatch-label">Seafoam<br>Green</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#d4b896;"></div><div class="swatch-label">Sand<br>Beige</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#4a7c59;"></div><div class="swatch-label">Sage<br>Green</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#9b9b9b;"></div><div class="swatch-label">Brushed<br>Nickel</div></div>
+    </div>
+    <div class="callout c-red"><div class="ci">🚫</div><div><strong>Never use:</strong> Brown tones, chrome hardware, oil-rubbed bronze, gold/brass, dark or black accent walls. One finish, every property: brushed nickel.</div></div>
+
+    <div class="stitle">The Bed Photo Test — Before You List Any Room</div>
+    <div class="callout c-gold"><div class="ci">📸</div><div><strong>The Rule:</strong> Stand in the doorway. Take one photo of the bed. Compare to the Amazon listing photo for <a href="https://www.amazon.com/dp/B0FGCRKP7B" target="_blank">B0FGCRKP7B</a> (the bedding standard). If the bed doesn't look like the listing photo — duvet flat, pillows stacked, throw folded at foot — redo it. The photo is the standard. Not your opinion. The photo.</div></div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 1: TURN PROCESS -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-navy" id="turn">
+  <div class="section-head">
+    <div class="sec-icon">🔄</div>
+    <div>
+      <h2>Rental Turn Process — Target: 1 Day</h2>
+      <p>Industry median is 9 days. We beat it by 8. Every vacant day = lost revenue.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout c-gold"><div class="ci">💰</div><div><strong>The math:</strong> A room sitting empty 1 extra week at $175/week = $175 gone forever. Turn cost target: $100/room or less. Same-day relist after Jerel approves photos.</div></div>
+
+    <div class="stitle">8-Step Turn Sequence</div>
+    <ol class="timeline">
+      <li><div class="tl-num">1</div><div class="tl-body"><div class="tl-title">Linen Inspection &amp; Removal</div><div class="tl-detail">Strip all bedding. Inspect mattress for stains/damage/bugs. Check mattress cover. Stained through cover → replace cover ($15). Damaged mattress → flag for replacement. Bag linens for laundering.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">2</div><div class="tl-body"><div class="tl-title">Trash Removal</div><div class="tl-detail">Empty all bins: room, closet, bathroom. Check under bed, behind furniture, inside drawers. Replace all trash liners. Items left behind → bag and hold 48 hours, then dispose.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">3</div><div class="tl-body"><div class="tl-title">Dusting &amp; Surfaces</div><div class="tl-detail">Dust all surfaces: shelves, mirrors, light fixtures, ceiling fan blades, window sills, baseboards, closet rod. Wipe all furniture with damp cloth then dry.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">4</div><div class="tl-body"><div class="tl-title">Floor Cleaning</div><div class="tl-detail">Vacuum/sweep hard floors. Mop with disinfectant. Check corners and under furniture. Wipe door frames, window trim. Note any floor damage.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">5</div><div class="tl-body"><div class="tl-title">High-Touch Sanitization</div><div class="tl-detail">Disinfect: light switches, door handles both sides, faucet handles, toilet flush handle, drawer pulls, closet rod, window locks. Hospital-grade wipes. Non-negotiable.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">6</div><div class="tl-body"><div class="tl-title">Bathroom Deep Clean</div><div class="tl-detail">Toilet: inside bowl, outside, seat top+bottom, base. Shower/tub: scrub walls, floor, grout, drain, showerhead. Sink+vanity: basin, faucet, handles, counter. Mirror: streak-free. Check caulking — re-caulk if peeling.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">7</div><div class="tl-body"><div class="tl-title">Amenity Restock + Visual Standard</div><div class="tl-detail">Fresh towels (1 bath, 1 hand). Fresh linens. Replace burned-out bulbs. Welcome kit: sheets, towels, laundry pod, dish soap, hand soap, 2 rolls TP. <strong>Make bed hotel-style per the Visual Standard section.</strong> Test smoke detector.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">8</div><div class="tl-body"><div class="tl-title">Final Inspection + 4 Photos → Jerel</div><div class="tl-detail">Walk room as if you're the new tenant. Test: lock code, lights, outlets, faucets (hot+cold), toilet, shower, window, closet, WiFi. Take 4 photos: (1) full room from doorway, (2) bed/closet, (3) bathroom, (4) lock keypad showing green. Text to Jerel. Room is NOT listed until photos approved.</div><span class="tl-who">Andrea/Sandra → Jerel approves</span></div></li>
+    </ol>
+
+    <div class="callout c-green"><div class="ci">⚡</div><div><strong>The Rule: Same-day relist.</strong> Once Jerel approves turn photos, room gets listed that same day. No exceptions. Vacancy is permanent lost revenue.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 2: ROOM READY CHECKLIST -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-ocean" id="ready">
+  <div class="section-head">
+    <div class="sec-icon">✅</div>
+    <div>
+      <h2>Room Ready Checklist — Pre-Move-In Verification</h2>
+      <p>Walk the room as if you are the new tenant. If it doesn't work for you, it won't work for them.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="checklist-grid">
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🔑</div><div class="cc-title">Entry &amp; Access (5)</div></div>
+        <ul class="cc-list">
+          <li>Lock code reset — new unique code for this tenant</li>
+          <li>Lock tested — lock/unlock 3 times from outside</li>
+          <li>Master code still active (Jerel's)</li>
+          <li>Front door opens/closes/locks smoothly</li>
+          <li>Room door opens/closes/latches</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">📶</div><div class="cc-title">Technology (3)</div></div>
+        <ul class="cc-list">
+          <li>WiFi working — loaded a webpage on your phone</li>
+          <li>WiFi name + password card in room</li>
+          <li>All outlets tested — phone charger, 2 outlets min</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🛏️</div><div class="cc-title">Bedroom (7)</div></div>
+        <ul class="cc-list">
+          <li>Full-size bed with clean mattress</li>
+          <li>Mattress cover on — no stains visible</li>
+          <li>Fresh linens + pillow</li>
+          <li>Closet rod in place and sturdy</li>
+          <li>All lights working</li>
+          <li>Ceiling fan working (all speeds + light)</li>
+          <li>Window opens, closes, locks</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🚿</div><div class="cc-title">Bathroom (5)</div></div>
+        <ul class="cc-list">
+          <li>Toilet flushes — no running after flush</li>
+          <li>Hot + cold water at sink and shower</li>
+          <li>No leaks under sink or at toilet base</li>
+          <li>Shower drain flows freely</li>
+          <li>Mirror clean, no cracks</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🎁</div><div class="cc-title">Welcome Kit (5)</div></div>
+        <ul class="cc-list">
+          <li>1 bath towel + 1 hand towel</li>
+          <li>1 laundry detergent pod</li>
+          <li>Dish soap (small bottle)</li>
+          <li>Hand soap at bathroom sink</li>
+          <li>2 rolls toilet paper</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🔥</div><div class="cc-title">Safety + Docs (5)</div></div>
+        <ul class="cc-list">
+          <li>Smoke detector tested — heard beep</li>
+          <li>Clear path to nearest exit</li>
+          <li>No tripping hazards</li>
+          <li>4 move-in photos sent to Jerel</li>
+          <li>House Rules posted in common area</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stitle">Chris Peisher Engineer's Rent-Ready Standard — 60+ Items</div>
+    <div class="callout c-blue"><div class="ci">🏗️</div><div><strong>Chris Peisher owns 100 rentals in Macon, GA.</strong> This is his full interior inspection checklist. Run it on every unit before it goes live and on every major turnover. Non-negotiable standard.</div></div>
+    <div class="checklist-grid">
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🏠</div><div class="cc-title">Exterior</div></div>
+        <ul class="cc-list">
+          <li>Good mailbox, numbers visible</li>
+          <li>Door surrounds like new</li>
+          <li>Fresh paint with primer</li>
+          <li>New door locks/knobs per spec</li>
+          <li>Fresh caulking on all penetrations</li>
+          <li>No wood rot anywhere</li>
+          <li>Good pressure wash of entire exterior</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🪟</div><div class="cc-title">General Interior</div></div>
+        <ul class="cc-list">
+          <li>No funny smells</li>
+          <li>Durable flooring — like new</li>
+          <li>Walls and trim caulked</li>
+          <li>Outlets/switches/covers like new</li>
+          <li>Ceiling clean and in good condition</li>
+          <li>Brushed nickel hardware everywhere</li>
+          <li>Insulated windows — windows work</li>
+          <li>Attic access works, well insulated</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">❄️</div><div class="cc-title">HVAC</div></div>
+        <ul class="cc-list">
+          <li>Easy access to filter</li>
+          <li>Drain pan in place</li>
+          <li>Easy access to EZ-trap</li>
+          <li>Condensate shut-off functioning</li>
+          <li>Proper line set insulation</li>
+          <li>2.5-ton min for 3/2 house</li>
+          <li>Smart thermostat (Nest) installed</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🔥</div><div class="cc-title">Water Heater</div></div>
+        <ul class="cc-list">
+          <li>Recent/new water heater</li>
+          <li>No rust or corrosion</li>
+          <li>Set to 120°F (scald prevention)</li>
+          <li>TPR valve in place and working</li>
+          <li>No active drips or leaks</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🍳</div><div class="cc-title">Kitchen</div></div>
+        <ul class="cc-list">
+          <li>New/like-new stove with all burners working</li>
+          <li>Oven works — tested</li>
+          <li>Refrigerator cooling — tested</li>
+          <li>Dishwasher installed (if plumbing allows)</li>
+          <li>No leaks under sink</li>
+          <li>Moen faucet (brushed nickel, lifetime warranty)</li>
+          <li>Garbage disposal working</li>
+          <li>Granite or solid countertop</li>
+        </ul>
+      </div>
+      <div class="checklist-card">
+        <div class="cc-head"><div class="cc-icon">🛁</div><div class="cc-title">Bathrooms</div></div>
+        <ul class="cc-list">
+          <li>No leaks in floor or ceiling</li>
+          <li>Shower surround like new</li>
+          <li>Toilet works — tested</li>
+          <li>Niagara Stealth 0.8 GPF toilet</li>
+          <li>Moen faucet (brushed nickel)</li>
+          <li>Low-flow 1.25 GPM showerhead</li>
+          <li>New toilet seat</li>
+          <li>Good caulking — no mold</li>
+          <li>Brushed nickel towel bars, TP holder</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 3: HOUSE RULES -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-coral" id="rules">
+  <div class="section-head">
+    <div class="sec-icon">📋</div>
+    <div>
+      <h2>House Rules — Posted in Every Property</h2>
+      <p>Kitchen wall, next to the fridge, eye level. Laminated. Same spot, every house.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout c-red"><div class="ci">⚠️</div><div><strong>These rules protect everyone — tenants AND the property.</strong> Enforce them every single time. One ignored violation signals to all tenants that rules are optional.</div></div>
+
+    <div class="rule-grid">
+      <div class="rule-card"><div class="rule-num">1</div><div class="rule-title">No Smoking Anywhere</div><div class="rule-text">No cigarettes, vaping, marijuana, incense, or candles inside the home or on the property. This is a fire risk and violates lease.</div><div class="rule-enforcement">Violation → Immediate written notice. 2nd offense → eviction.</div></div>
+      <div class="rule-card"><div class="rule-num">2</div><div class="rule-title">Kitchen Clean After Every Use</div><div class="rule-text">Wash dishes immediately or put in dishwasher. Wipe stove after cooking. Counters clear. Sink empty. No food left out.</div><div class="rule-enforcement">Violation → Verbal warning. 3rd offense → written notice.</div></div>
+      <div class="rule-card"><div class="rule-num">3</div><div class="rule-title">No Overnight Guests</div><div class="rule-text">Guests must leave by 9 PM. Only persons on the lease may sleep in the home. No exceptions.</div><div class="rule-enforcement">Violation → Written notice. 2nd offense → eviction proceedings.</div></div>
+      <div class="rule-card"><div class="rule-num">4</div><div class="rule-title">Fridge = One Shelf Per Tenant</div><div class="rule-text">Each tenant has one labeled shelf (their room number). No unlabeled food. Sunday = expired food purge day.</div><div class="rule-enforcement">Violation → Verbal reminder. Unlabeled food may be discarded.</div></div>
+      <div class="rule-card"><div class="rule-num">5</div><div class="rule-title">Quiet Hours: 10 PM – 7 AM</div><div class="rule-text">No loud music, TV, or noise after 10 PM. Respect your neighbors. This is a working household.</div><div class="rule-enforcement">Violation → Verbal warning. Persistent violations → lease termination.</div></div>
+      <div class="rule-card"><div class="rule-num">6</div><div class="rule-title">Common Areas Stay Common</div><div class="rule-text">No personal items stored in living room, hallways, or shared spaces. Remove laundry from washer/dryer within 1 hour.</div><div class="rule-enforcement">Violation → Items may be removed by staff. Tenant notified same day.</div></div>
+    </div>
+
+    <div class="stitle">Enforcement Ladder — Follow This Order Every Time</div>
+    <ol class="timeline">
+      <li><div class="tl-num" style="background:var(--green);">1</div><div class="tl-body"><div class="tl-title">Verbal Warning (Private)</div><div class="tl-detail">Pull tenant aside privately. "Hey [Name], I need to talk to you about something real quick." State what you saw. State the rule. "Can you handle that now?" Thank them. Log date + incident and text Jerel.</div></div></li>
+      <li><div class="tl-num" style="background:var(--gold); color:var(--navy);">2</div><div class="tl-body"><div class="tl-title">Written Warning</div><div class="tl-detail">Second violation of same rule. Write it up. Tenant signs. File it. Jerel is notified. This is on record.</div></div></li>
+      <li><div class="tl-num" style="background:var(--coral);">3</div><div class="tl-body"><div class="tl-title">Final Warning</div><div class="tl-detail">Third violation. Jerel calls the tenant directly. Clear message: next violation = end of lease. Documented.</div></div></li>
+      <li><div class="tl-num" style="background:var(--red);">4</div><div class="tl-body"><div class="tl-title">Non-Renewal / Eviction Proceedings</div><div class="tl-detail">Jerel decides. Follow Florida landlord-tenant law. Document everything from step 1 forward.</div></div></li>
+    </ol>
+
+    <div class="stitle">Violation Conversation Script — Word for Word</div>
+    <div class="staff-card">
+      <h4>Use this script every time. Stay calm. Stay private.</h4>
+      <div style="background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px; font-size:14px; line-height:2;">
+        <strong>"Hey [Name], I need to talk to you about something real quick."</strong><br>
+        <em>[State what you saw:]</em> "I noticed [dishes were left in the sink / someone was here overnight / I smelled smoke]."<br>
+        <strong>"That's one of our house rules — [state the rule simply]."</strong><br>
+        <strong>"I need you to take care of that. Can you handle it now?"</strong><br>
+        <em>[If they push back:]</em> "I hear you, but the rule is the same for everyone. I just need you to handle it."<br>
+        <strong>"Thanks, I appreciate it."</strong><br><br>
+        <em>Then: Write down date + tenant name + rule + what you said. Text to Jerel end of day.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 4: LOCK SYSTEM -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-navy" id="locks">
+  <div class="section-head">
+    <div class="sec-icon">🔐</div>
+    <div>
+      <h2>Lock System — Split Architecture, $0/Month</h2>
+      <p>Exterior doors: WiFi/Z-Wave smart locks. Bedroom doors: Kwikset SmartKey mechanical. Total subscription: zero.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout c-gold"><div class="ci">💡</div><div><strong>The architecture:</strong> Exterior/front doors (~30–40 locks) get remote-controlled smart locks. Bedroom interior doors (~60–80 locks) get Kwikset SmartKey mechanical rekey — $20/door per turnover, $0 subscription. Eliminates $600–$1,200/month in per-door fees at 100+ door scale.</div></div>
+
+    <div class="stitle">Platform Comparison — Choose Your Exterior Lock System</div>
+    <div class="lock-grid">
+      <div class="lock-card lc-best">
+        <div class="lock-title">⭐ Yale Z-Wave + Home Assistant</div>
+        <div class="lock-price">$0<span>/month forever</span></div>
+        <div class="lock-desc">Open-source local control. Z-Wave mesh — no WiFi per lock. Co-living operators' preferred method. Raspberry Pi hub ($100 one-time). Works offline. ~$6,100 upfront for 30 locks.</div>
+        <span class="lc-rec lc-rec-best">✅ Best Long-Term (Scale)</span>
+      </div>
+      <div class="lock-card lc-best">
+        <div class="lock-title">⭐ Schlage Encode Plus + Home Assistant</div>
+        <div class="lock-price">$0<span>/month</span></div>
+        <div class="lock-desc">WiFi direct, no hub per lock. BHMA Grade 2 rated, 100 codes/lock. $300–400/lock at Home Depot. Manage via Home Assistant for unified dashboard. Best for starting out now.</div>
+        <span class="lc-rec lc-rec-best">✅ Start Here Now</span>
+      </div>
+      <div class="lock-card">
+        <div class="lock-title">TTLock Platform</div>
+        <div class="lock-price">$0<span>/month</span></div>
+        <div class="lock-desc">Free management platform, pay hardware only. $50–100/lock. TTLock G3 gateway: $30 per property (not per lock). API available. Good budget option for co-living at scale.</div>
+        <span class="lc-rec lc-rec-test">🧪 Budget Alternative</span>
+      </div>
+      <div class="lock-card">
+        <div class="lock-title">Sifely S</div>
+        <div class="lock-price">$0<span>/month</span></div>
+        <div class="lock-desc">200 codes/lock, auto-expiring, web dashboard. $80–200/lock (cheapest hardware). Real-world reviews flag 6–12 month reliability cliff: keypad failures on extended use.</div>
+        <span class="lc-rec lc-rec-test">🧪 Test 10–15 Doors First</span>
+      </div>
+      <div class="lock-card">
+        <div class="lock-title">Salto Systems (Salto KS)</div>
+        <div class="lock-price">Per-property<span> flat rate</span></div>
+        <div class="lock-desc">What co-living Facebook groups call "Safari" — voice-to-text error. Hospitality/student housing grade. Used by Sonder. Requires certified installer. Evaluate for SJHP Pinewood (54 units) in future.</div>
+        <span class="lc-rec lc-rec-future">🔮 Future — 100+ Unit Scale</span>
+      </div>
+      <div class="lock-card lc-avoid">
+        <div class="lock-title">RemoteLock (PadSplit Standard)</div>
+        <div class="lock-price" style="color:var(--red);">$6–12<span>/lock/month</span></div>
+        <div class="lock-desc">PadSplit uses this (they pass cost to hosts). 100 locks = $600–1,200/month ongoing, forever. Single dashboard is good. But the per-door fee model doesn't scale to 100+ doors.</div>
+        <span class="lc-rec lc-rec-avoid">❌ Not at 100+ Door Scale</span>
+      </div>
+    </div>
+
+    <div class="stitle">Interior Bedroom Doors — Kwikset SmartKey (No Subscription Ever)</div>
+    <div class="callout c-seafoam"><div class="ci">🏠</div><div><strong>Bedroom doors stay mechanical.</strong> Kwikset SmartKey deadbolt + passage knob on every bedroom door. Rekey on every turnover with the SmartKey tool — takes 30 seconds, costs ~$20 in kits. $0 subscription. $0 per-door fee. No WiFi needed. No app needed. Rekey, done.</div></div>
+
+    <div class="stitle">Code Management Rules</div>
+    <table>
+      <tr><th>Code Type</th><th>Who</th><th>Standard</th></tr>
+      <tr><td><strong>Master Code</strong></td><td>Jerel ONLY</td><td>Never shared. Never written down in tenant-accessible location. Dashboard controls all exterior locks.</td></tr>
+      <tr><td><strong>Staff Codes</strong></td><td>Andrea + Sandra</td><td>Time-limited access codes. Auto-expire. Can be revoked instantly from dashboard.</td></tr>
+      <tr><td><strong>Tenant Codes</strong></td><td>Per tenant, per property</td><td>Exterior door only. Set in dashboard. Delete same hour as move-out. Bedroom = SmartKey rekey on turnover.</td></tr>
+      <tr><td><strong>Physical Keys</strong></td><td>Nobody</td><td>None issued. Ever.</td></tr>
+    </table>
+
+    <div class="stitle">Code Rotation Protocol — Every Turnover</div>
+    <ol class="timeline">
+      <li><div class="tl-num">1</div><div class="tl-body"><div class="tl-title">Tenant Moves Out</div><div class="tl-detail">Delete their code from dashboard immediately — same day, same hour. Do not wait.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">2</div><div class="tl-body"><div class="tl-title">Generate New Code</div><div class="tl-detail">Create new 4–6 digit code in dashboard. No reuse. No obvious codes (1234, 0000, tenant birthday). Record in Jerel's tracking sheet only.</div><span class="tl-who">Andrea or Sandra → Jerel records</span></div></li>
+      <li><div class="tl-num">3</div><div class="tl-body"><div class="tl-title">Program Exterior Lock + Rekey Bedroom</div><div class="tl-detail">Push new code to exterior lock via dashboard. Rekey bedroom door with Kwikset SmartKey kit. Test 3 times: lock, unlock, lock. Verify old code no longer works.</div><span class="tl-who">Andrea or Sandra</span></div></li>
+      <li><div class="tl-num">4</div><div class="tl-body"><div class="tl-title">Give Code to New Tenant in Person</div><div class="tl-detail">In person at move-in. Never by text or email. Show them how to use the keypad. Have them try it while you watch.</div><span class="tl-who">Andrea or Sandra at move-in</span></div></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 5: MATERIALS & FIXTURES -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-seafoam" id="materials">
+  <div class="section-head">
+    <div class="sec-icon">🛒</div>
+    <div>
+      <h2>Approved Materials &amp; Products — Buy Once, Maintain Never</h2>
+      <p>Every item chosen for durability, easy cleaning, and low maintenance cost. Click to buy.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout c-green"><div class="ci">💡</div><div><strong>The math:</strong> A lifetime warranty faucet at $120 vs. a $30 faucet replaced every 18 months. Over 10 years: $30 faucet costs $200+ in replacements and callbacks. Moen costs $120 total — including free replacement parts for life.</div></div>
+
+    <div class="stitle">Approved Product Showcase — Click to Buy</div>
+    <div class="product-grid">
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#c8d8e8,#8fa8c0);">
+          <span>🚰</span>
+          <img src="https://m.media-amazon.com/images/I/71E8N5QL4FL._AC_SL1500_.jpg" alt="Moen 84021SRN bathroom faucet" onerror="this.style.display='none'">
+        </div>
+        <div class="product-body">
+          <div class="product-name">Moen 84021SRN Bathroom Faucet</div>
+          <div class="product-why">Brushed nickel. Single handle. Lifetime warranty — free replacement parts forever. Never pay for a faucet repair again.</div>
+          <span class="product-badge pb-warranty">🛡️ Lifetime Warranty</span>
+          <a href="https://www.amazon.com/dp/B0BFZWWLXH" target="_blank" class="buy-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#c8d8e8,#8fa8c0);">
+          <span>🍳</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Moen 7402SRS Kitchen Pulldown Faucet</div>
+          <div class="product-why">Brushed nickel. Pulldown spray. Same finish as bathroom faucets — consistent throughout. Lifetime warranty on parts.</div>
+          <span class="product-badge pb-warranty">🛡️ Lifetime Warranty</span>
+          <a href="https://www.amazon.com/dp/B06XWZSM3N" target="_blank" class="buy-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#e8f4fb,#b0d4e8);">
+          <span>🛏️</span>
+          <img src="https://m.media-amazon.com/images/I/81+Z6c+ABZL._AC_SL1500_.jpg" alt="Coastal bedding set" onerror="this.style.display='none'">
+        </div>
+        <div class="product-body">
+          <div class="product-name">7-Piece Coastal Comforter Set</div>
+          <div class="product-why">Beachy colors — navy, ocean blue, sage, or sand. 7-piece includes comforter, pillow shams, throw. Made hotel-style on every turn.</div>
+          <span class="product-badge pb-required">⭐ Visual Standard</span>
+          <a href="https://www.amazon.com/dp/B0FGCRKP7B" target="_blank" class="buy-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#e8f6f4,#a0d8d0);">
+          <span>🛏️</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Storage Bed — Forestell Queen</div>
+          <div class="product-why">Built-in drawers + USB charging + LED light. Under-bed storage eliminates "no room" complaints. No box spring needed.</div>
+          <span class="product-badge pb-smart">🔌 USB Charging Built-In</span>
+          <a href="#" class="buy-link" style="background:var(--muted);">Search "Forestell Queen Bed" →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#fef9ec,#f0d8a0);">
+          <span>🚽</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Niagara Stealth 0.8 GPF Toilet</div>
+          <div class="product-why">Uses 0.8 GPF vs. standard 1.6. Saves ~$50/year per toilet on water bill. Pays for itself in 2 years. Standard at every property.</div>
+          <span class="product-badge pb-saves">💧 Saves $50/yr per toilet</span>
+          <a href="#" class="buy-link" style="background:var(--muted);">Search "Niagara Stealth 0.8GPF" →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#fdecea,#f5b8b0);">
+          <span>🗑️</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Modern Step/Touchless Trash Cans</div>
+          <div class="product-why">One per bedroom, one kitchen, one per bathroom. Modern look, easy to clean. Options below — pick any that matches beachy aesthetic.</div>
+          <span class="product-badge pb-required">📍 1 Per Room Required</span>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+            <a href="https://www.amazon.com/dp/B07PCXYSY8" target="_blank" class="buy-link" style="flex:1; min-width:80px; font-size:11px; padding:6px;">Option A</a>
+            <a href="https://www.amazon.com/dp/B0FP1W4H6J" target="_blank" class="buy-link" style="flex:1; min-width:80px; font-size:11px; padding:6px;">Option B</a>
+            <a href="https://www.amazon.com/dp/B0BFYQZQ5S" target="_blank" class="buy-link" style="flex:1; min-width:80px; font-size:11px; padding:6px;">Option C</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#f0faf8,#a0d8d0);">
+          <span>🚪</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Freestanding Wardrobe Unit</div>
+          <div class="product-why">Required for any room without a built-in closet. Assemble before tenant arrives. Non-negotiable — tenant cannot live in a room without storage.</div>
+          <span class="product-badge pb-required">❗ Required (no-closet rooms)</span>
+          <a href="https://www.amazon.com/dp/B0C77XTDCB" target="_blank" class="buy-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#e8f4fb,#90c8e0);">
+          <span>🌡️</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Nest Smart Thermostat</div>
+          <div class="product-why">PIN-locked to owner only. Tenants cannot change temp. Remote control. Saves 15–20% on HVAC costs. Eliminates thermostat wars.</div>
+          <span class="product-badge pb-smart">📱 Remote Control</span>
+          <a href="#" class="buy-link" style="background:var(--muted);">Search "Nest Thermostat" →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,#fff8e1,#f0d060);">
+          <span>💡</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">LED Bulbs — Buy in Bulk</div>
+          <div class="product-why">5000K daylight in kitchens/baths. 3000K warm in bedrooms. 25,000 hours (11+ years). 75% less electricity than incandescent. Buy one case, never think about it again.</div>
+          <span class="product-badge pb-saves">💰 75% Less Electricity</span>
+          <a href="#" class="buy-link" style="background:var(--muted);">Buy in bulk at Costco/HD →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stitle">Materials Standard Table</div>
+    <table>
+      <tr><th>Category</th><th>Standard</th><th>Rule</th></tr>
+      <tr><td><strong>Flooring</strong></td><td>Luxury Vinyl Plank (LVP) — sealed hard surface</td><td class="td-red">NO CARPET. Ever. LVP: mop it, done. 20+ year life.</td></tr>
+      <tr><td><strong>Countertops</strong></td><td>Granite preferred, solid surface acceptable</td><td>Doesn't stain, burn, or scratch. Wipe and go.</td></tr>
+      <tr><td><strong>Paint</strong></td><td>Warm white, neutral greige, or light gray walls</td><td>Buy 5-gallon bucket of one color — always have it for touch-ups.</td></tr>
+      <tr><td><strong>Wall Art</strong></td><td>Canvas prints ONLY</td><td class="td-red">No framed glass. Glass breaks, cuts people, creates liability.</td></tr>
+      <tr><td><strong>Shower Curtains</strong></td><td>Beachy pattern — coastal, nautical, botanical. Light colors.</td><td>No plain white (shows mildew). Brushed nickel rod + rings. Replace every 6 months or on turnover.</td></tr>
+      <tr><td><strong>Mattress Covers</strong></td><td>Waterproof protector on EVERY mattress, ALWAYS</td><td class="td-red">Non-negotiable. No mattress ever uncovered. Failure = full replacement cost.</td></tr>
+      <tr><td><strong>Dishwasher</strong></td><td>Install in every property where plumbing allows</td><td class="td-green">#1 reducer of dish conflicts. A $400 dishwasher eliminates the most common tenant complaint.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 6: CLEANLINESS -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-sage" id="clean">
+  <div class="section-head">
+    <div class="sec-icon">🧹</div>
+    <div>
+      <h2>Cleanliness Standards</h2>
+      <p>Cleanliness is the #1 reason tenants stay or leave. Enforce it every single day.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout c-red"><div class="ci">🚨</div><div><strong>Dirty kitchen or bathroom = tenant leaves.</strong> Dirty common areas breed more dirt — broken window theory. Keep the standard high and enforce it from day one.</div></div>
+
+    <div class="stitle">Kitchen Standards</div>
+    <table>
+      <tr><th style="width:15%">Area</th><th>Standard</th><th style="width:30%">Violation Trigger</th></tr>
+      <tr><td><strong>Sink</strong></td><td><strong>Always empty.</strong> No dishes sitting in the sink at any time.</td><td>Dishes left more than 1 hour after cooking</td></tr>
+      <tr><td><strong>Stove</strong></td><td><strong>Always spotless.</strong> Wipe down after every use — burners, drip pans, surface.</td><td>Food residue left after cooking</td></tr>
+      <tr><td><strong>Counters</strong></td><td>Clear and wiped. No food left out.</td><td>Food or crumbs left overnight</td></tr>
+      <tr><td><strong>Fridge</strong></td><td>Each tenant gets one labeled shelf (room number). Sunday = expired food purge day.</td><td>Unlabeled food, expired food, shelf overflow</td></tr>
+      <tr><td><strong>Trash</strong></td><td>Take out when full. Never pile on top of a full can.</td><td>Overflowing trash not taken out</td></tr>
+    </table>
+
+    <div class="stitle">Inspection Schedule</div>
+    <table>
+      <tr><th>Frequency</th><th>What</th><th>Who</th></tr>
+      <tr><td class="td-gold"><strong>Daily</strong></td><td>Walk kitchen, bathrooms, common areas. Quick 5-minute sweep. Flag any violations same day.</td><td>Andrea or Sandra</td></tr>
+      <tr><td class="td-gold"><strong>Twice Monthly</strong></td><td>Full property walkthrough: safety, maintenance, cleanliness, utility meters, exterior. 30–45 min per property.</td><td>Andrea or Sandra</td></tr>
+      <tr><td class="td-gold"><strong>Monthly</strong></td><td>Jerel reviews walkthrough reports. Flag trends. Decide on capital repairs or rule changes.</td><td>Jerel</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 7: MAINTENANCE -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-coral" id="maint">
+  <div class="section-head">
+    <div class="sec-icon">🔧</div>
+    <div>
+      <h2>Maintenance Response Protocol — Preventive Beats Reactive</h2>
+      <p>A $15 supply line prevents a $10,000 water damage claim. Respond fast. Fix right. Document everything.</p>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="stitle">Priority Levels</div>
+    <table>
+      <tr><th>Priority</th><th>Examples</th><th>Response Time</th><th>Resolve By</th></tr>
+      <tr class="priority-row-e"><td>🚨 EMERGENCY</td><td>Active water leak, no power, no heat/AC (extreme temps), fire, break-in, gas smell, sewage backup</td><td>&lt; 1 hour</td><td>&lt; 24 hours</td></tr>
+      <tr class="priority-row-u"><td>⚠️ URGENT</td><td>Appliance failure (fridge/stove), hot water out, toilet not flushing (only one), lock malfunction, roof leak</td><td>&lt; 4 hours</td><td>24–48 hours</td></tr>
+      <tr class="priority-row-r"><td>✅ ROUTINE</td><td>Minor repairs, cosmetic damage, slow drain, squeaky door, light out, caulk peeling, loose cabinet</td><td>&lt; 24 hours</td><td>3–7 days</td></tr>
+    </table>
+
+    <div class="stitle">Escalation Path — Who Does What</div>
+    <div class="callout c-green"><div class="ci">✅</div><div><strong>Jerel's only job in maintenance: approve vendor quotes before work begins.</strong> Everything else — assessment, Felix's work, vendor calls, scheduling — is handled by Andrea and Felix without interrupting Jerel.</div></div>
+
+    <div class="esc-flow">
+      <div class="esc-step es1"><div class="esc-num">1</div><div class="esc-content"><div class="esc-who">Andrea or Sandra — First Contact</div><div class="esc-desc">Receive ALL tenant maintenance requests. Assess the issue, take a photo, assign priority (Emergency / Urgent / Routine), and log it. Do not ignore any request — even if it seems minor.</div></div></div>
+      <div class="esc-step es2"><div class="esc-num">2</div><div class="esc-content"><div class="esc-who">Felix (Andrea's husband) — Primary Tech</div><div class="esc-desc">Felix handles all issues within his scope. Andrea contacts Felix for light plumbing, light electrical, AC maintenance. Felix resolves it. Done. Documents completion + photo.</div><span class="esc-tag">See Felix's Scope table below</span></div></div>
+      <div class="esc-step es3"><div class="esc-num">3</div><div class="esc-content"><div class="esc-who">Felix + Andrea Call Vendor (Beyond Felix's Scope)</div><div class="esc-desc">If issue is beyond Felix's scope: Felix or Andrea calls the vendor directly. Gets a written/verbal quote. Texts Jerel: "Felix can't handle [issue] at [property]. Quote from [vendor]: $[amount]. Okay to proceed?" That's all Jerel needs.</div></div></div>
+      <div class="esc-step es4"><div class="esc-num">4</div><div class="esc-content"><div class="esc-who">Jerel — Approve or Decline Only</div><div class="esc-desc">Jerel replies: "Yes" or "No / get another quote." That is Jerel's entire role. No calls to vendors. No scheduling. One text response.</div></div></div>
+      <div class="esc-step es5"><div class="esc-num">5</div><div class="esc-content"><div class="esc-who">Andrea Schedules Vendor</div><div class="esc-desc">Once approved, Andrea schedules vendor, confirms access, follows up to confirm work complete. Logs cost + photo in maintenance record.</div></div></div>
+      <div class="esc-step es911"><div class="esc-num">911</div><div class="esc-content"><div class="esc-who">Emergency Services — Call First</div><div class="esc-desc">Fire, gas smell (evacuate first), medical emergency, active break-in. Call 911 FIRST. Then text Jerel. Do not wait for Jerel before calling 911.</div></div></div>
+    </div>
+
+    <div class="stitle">Felix's Scope — What He Can vs. Cannot Handle</div>
+    <table>
+      <tr><th>Category</th><th>Felix handles ✅</th><th>Needs outside vendor ⚠️</th></tr>
+      <tr><td><strong>Plumbing</strong></td><td>Supply line, toilet flapper, running toilet, faucet swap (Moen warranty parts), P-trap, drain clog, caulking</td><td>Water heater replacement, main line, sewer backup, anything requiring permits</td></tr>
+      <tr><td><strong>Electrical</strong></td><td>Outlet swap, switch replacement, GFCI reset/replace, light fixture, ceiling fan, breaker reset</td><td>Panel work, new circuits, anything requiring permits or licensed electrician</td></tr>
+      <tr><td><strong>AC / HVAC</strong></td><td>Filter change, condensate drain flush, EZ-trap reset, thermostat swap</td><td>Compressor failure, refrigerant leak, full unit replacement, duct work</td></tr>
+      <tr><td><strong>General</strong></td><td>Lock swap, door adjustment, caulk, paint touch-up, cabinet hardware, light bulbs, weatherstripping</td><td>Roof repair, structural work, foundation issues</td></tr>
+    </table>
+
+    <div class="callout c-blue"><div class="ci">🤖</div><div><strong>AI Opportunity — Vendoroo:</strong> AI handles after-hours calls 24/7, triages emergencies, troubleshoots simple issues, and logs everything. A missed 2 AM water leak = $10K–$100K. Vendoroo at $0.75–$1/door/month is the single highest-ROI automation for this portfolio. See Section 8.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 8: AI & AUTOMATION -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-ocean" id="ai">
+  <div class="section-head">
+    <div class="sec-icon">🤖</div>
+    <div>
+      <h2>AI &amp; Automation Opportunities</h2>
+      <p>ROMA = Revenue Produced ÷ Hours of Management Attention Required. Every automation increases ROMA.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <table>
+      <tr><th>Tool</th><th>What It Does</th><th>Priority</th></tr>
+      <tr><td><strong>Vendoroo AI</strong></td><td>24/7 after-hours call handling, smart triage, automatic logging, emergency escalation, pattern recognition for recurring issues. $0.75–$1/door/month. One missed 2 AM leak = $10K–$100K.</td><td class="td-red">Install NOW — highest ROI</td></tr>
+      <tr><td><strong>Nest Thermostat</strong></td><td>Remote temp control. PIN-locked to owner only. Tenants cannot change setting. Saves 15–20% on HVAC costs.</td><td class="td-gold">Every property</td></tr>
+      <tr><td><strong>Lock Dashboard</strong></td><td>Remote code management across all exterior locks. Entry/exit logs. Battery alerts. Auto-expire codes on lease end.</td><td class="td-green">Already using — optimize</td></tr>
+      <tr><td><strong>Automated Rent Collection</strong></td><td>Auto-charge weekly via payment platform. No chasing. No excuses.</td><td class="td-gold">Set up if not active</td></tr>
+    </table>
+
+    <div class="roi-box">
+      <h4>Vendoroo ROI — Jerel's Portfolio</h4>
+      <div class="roi-row"><span>Cost per door per month</span><span>$0.75–$1.00</span></div>
+      <div class="roi-row"><span>Portfolio: 50–100 rooms</span><span>$50–$100/month</span></div>
+      <div class="roi-row"><span>Hours saved per month (after-hours + logging)</span><span>8–15 hours</span></div>
+      <div class="roi-row"><span>Value of Jerel's time per hour</span><span>$200+</span></div>
+      <div class="roi-row"><span>Monthly time value saved</span><span>$1,600–$3,000</span></div>
+      <div class="roi-row"><span>Risk avoided: 1 missed water leak per year</span><span>$10,000–$100,000</span></div>
+      <div class="roi-row"><span>Annual ROI</span><span>30x–50x cost</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 9: STAFF REFERENCE -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-sage" id="staff">
+  <div class="section-head">
+    <div class="sec-icon">👥</div>
+    <div>
+      <h2>Staff Reference Card — Andrea &amp; Sandra</h2>
+      <p>Print this. Laminate it. Post it. Everything needed to handle 90% of situations.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout c-gold"><div class="ci">🖨️</div><div><strong>This page is designed to be printed, laminated, and posted.</strong> Keep one copy at each property and one in Andrea and Sandra's possession at all times.</div></div>
+
+    <div class="stitle">3 Rules You Must ALWAYS Enforce — No Exceptions</div>
+    <div class="rule-grid">
+      <div class="rule-card" style="border-color:var(--red); background:#fff5f5;">
+        <div class="rule-num" style="color:var(--red);">1</div>
+        <div class="rule-title">No Smoking Anywhere</div>
+        <div class="rule-text">If you smell smoke, incense, candles, or vape — have the conversation immediately. Check the room if needed. Fire risk + property damage.</div>
+      </div>
+      <div class="rule-card" style="border-color:var(--red); background:#fff5f5;">
+        <div class="rule-num" style="color:var(--red);">2</div>
+        <div class="rule-title">Kitchen Clean After Use</div>
+        <div class="rule-text">Sink empty. Stove clean. Every time. This is the #1 source of tenant conflict. Enforce the first time you see a violation.</div>
+      </div>
+      <div class="rule-card" style="border-color:var(--red); background:#fff5f5;">
+        <div class="rule-num" style="color:var(--red);">3</div>
+        <div class="rule-title">No Overnight Guests</div>
+        <div class="rule-text">If someone not on the lease is here past 9 PM, they need to leave. "House rules say no overnight guests. They need to head out."</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0;">
+      <div class="staff-card">
+        <h4>Daily Checklist — Every Property</h4>
+        <ul class="cl">
+          <li>Walk kitchen: sink empty? Stove clean? Counters clear?</li>
+          <li>Walk bathrooms: toilet clean? Drain clear? No standing water?</li>
+          <li>Walk common areas: hallways clear? Living room picked up?</li>
+          <li>Check trash cans: full? Take out or remind tenant.</li>
+          <li>Check front door lock: working? Battery light green?</li>
+          <li>Maintenance issues? Note and report (Emergency = call now).</li>
+        </ul>
+      </div>
+      <div class="staff-card">
+        <h4>Weekly Checklist — Every Property</h4>
+        <ul class="cl">
+          <li>Sunday: fridge purge — throw out unlabeled + expired food</li>
+          <li>Mop all hard floors in common areas</li>
+          <li>Deep clean shared bathrooms (toilet, shower, sink, mirror)</li>
+          <li>Check all light bulbs — replace burned out</li>
+          <li>Check smoke detectors — green light on?</li>
+          <li>Restock cleaning supplies (soap, bags, TP)</li>
+          <li>Report new maintenance issues to Jerel by end of week</li>
+          <li>Collect + record rent payments</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="staff-card">
+      <h4>Emergency Contacts</h4>
+      <table>
+        <tr><td style="font-weight:700;">Jerel Williams (Owner)</td><td>[Jerel's phone number]</td></tr>
+        <tr><td style="font-weight:700;">Fire / Police / Medical</td><td><strong>911</strong></td></tr>
+        <tr><td style="font-weight:700;">JEA (Power/Water Emergency)</td><td>904-665-6000</td></tr>
+        <tr><td style="font-weight:700;">Poison Control</td><td>1-800-222-1222</td></tr>
+        <tr><td style="font-weight:700;">Felix (Maintenance Tech)</td><td>[Felix's phone number]</td></tr>
+        <tr><td style="font-weight:700;">Plumber (Jerel's preferred)</td><td>[Fill in]</td></tr>
+        <tr><td style="font-weight:700;">HVAC (Jerel's preferred)</td><td>[Fill in]</td></tr>
+      </table>
+    </div>
+
+    <div class="callout c-gold"><div class="ci">📌</div><div><strong>House Rules are posted:</strong> Kitchen wall · Next to the fridge · At eye level · Laminated · Same spot in every house. If missing or damaged, replace it that day.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECTION 10: METRICS -->
+<!-- ══════════════════════════════════════ -->
+<div class="section s-navy" id="metrics">
+  <div class="section-head">
+    <div class="sec-icon">📊</div>
+    <div>
+      <h2>Key Metrics Dashboard</h2>
+      <p>"If you don't measure it, you don't manage it." — Ken McElroy</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-val">95%+</div><div class="metric-lbl">Occupancy Rate</div><div class="metric-target">Red flag: below 90% for 2+ weeks</div></div>
+      <div class="metric-card"><div class="metric-val">1 Day</div><div class="metric-lbl">Turn Time</div><div class="metric-target">Red flag: any turn &gt; 3 days</div></div>
+      <div class="metric-card"><div class="metric-val">&lt;$100</div><div class="metric-lbl">Turn Cost / Room</div><div class="metric-target">Red flag: any turn &gt; $150</div></div>
+      <div class="metric-card"><div class="metric-val">98%+</div><div class="metric-lbl">Rent Collection Rate</div><div class="metric-target">Red flag: below 95%</div></div>
+      <div class="metric-card"><div class="metric-val">&lt;1 hr</div><div class="metric-lbl">Emergency Response</div><div class="metric-target">Non-negotiable. No exceptions.</div></div>
+      <div class="metric-card"><div class="metric-val">12+ wks</div><div class="metric-lbl">Avg Tenant Stay</div><div class="metric-target">Red flag: average below 6 weeks</div></div>
+    </div>
+
+    <div class="stitle">All Tracked Metrics</div>
+    <table>
+      <tr><th>Metric</th><th>Target</th><th>Red Flag</th><th>How to Track</th></tr>
+      <tr><td><strong>Occupancy Rate</strong></td><td>95%+</td><td>Below 90% for 2+ weeks</td><td>Rooms occupied ÷ Total rooms. Count every Monday.</td></tr>
+      <tr><td><strong>Turn Time</strong></td><td>1 day</td><td>Any turn &gt; 3 days</td><td>Move-out date to relist date. Track per turn.</td></tr>
+      <tr><td><strong>Turn Cost</strong></td><td>&lt;$100/room</td><td>Any turn &gt; $150</td><td>Supplies + repairs + time. Track per turn.</td></tr>
+      <tr><td><strong>Rent Collection Rate</strong></td><td>98%+</td><td>Below 95%</td><td>Rent collected ÷ Rent owed. Weekly.</td></tr>
+      <tr><td><strong>Maintenance Response Time</strong></td><td>Emergency &lt;1hr / Urgent &lt;4hr / Routine &lt;24hr</td><td>Any emergency &gt; 2 hours</td><td>Time reported to first response. Log every work order.</td></tr>
+      <tr><td><strong>Maintenance Cost/Room/Month</strong></td><td>&lt;$25/room</td><td>&gt;$40/room for 2+ months</td><td>Total maintenance spend ÷ rooms. Monthly.</td></tr>
+      <tr><td><strong>Tenant Retention</strong></td><td>12+ weeks avg stay</td><td>Average &lt; 6 weeks</td><td>Move-in to move-out date. Average all tenants.</td></tr>
+      <tr><td><strong>Rule Violations / Month</strong></td><td>&lt;3 per property</td><td>&gt;5 per property or same tenant 3+ times</td><td>Count from staff reports. Monthly.</td></tr>
+      <tr><td><strong>Vacancy Loss ($)</strong></td><td>$0 (goal)</td><td>Any week a room sits empty that could be filled</td><td>(Empty room-weeks) × (weekly rent). Monthly total.</td></tr>
+      <tr><td><strong>Utility Cost/Room/Month</strong></td><td>Track trend — should be stable or declining</td><td>20%+ increase MoM without new tenants</td><td>Total utility bill ÷ rooms. Monthly.</td></tr>
+    </table>
+
+    <div class="stitle">Weekly Staff Report Template</div>
+    <div class="staff-card" style="font-family:monospace; font-size:13px; line-height:2.2;">
+      <h4>📋 Weekly Report — Send to Jerel every Friday</h4>
+      Week of: ___________ &nbsp;&nbsp; Property: ____________________<br>
+      Rooms Occupied: ____ / ____ (Total)<br>
+      Rooms Turned This Week: ____ &nbsp;&nbsp; Turn Time (days): ____<br>
+      Rent Collected This Week: $________ &nbsp;&nbsp; Still Owed: $________ (who: ____________)<br>
+      Maintenance: ____ total &nbsp;|&nbsp; Emergency: ____ &nbsp;|&nbsp; Urgent: ____ &nbsp;|&nbsp; Routine: ____<br>
+      Rule Violations: ____ &nbsp;&nbsp; Details: _________________________________<br>
+      New Move-Ins: ____ &nbsp;&nbsp; Move-Outs: ____<br>
+      Supplies Needed: _________________________________<br>
+      Notes for Jerel: _________________________________
+    </div>
+
+    <div class="callout c-gold"><div class="ci">💰</div><div><strong>Cash flow is king.</strong> If occupancy is high, turns are fast, collections are 98%+, and maintenance is under control — the operation is printing money. This dashboard tells you exactly where to look when something slips.</div></div>
+  </div>
+</div>
+
+<div style="height:60px;"></div>
+
+</div><!-- /main -->
+</body>
+</html>
